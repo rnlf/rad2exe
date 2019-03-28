@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+
 # Sanity check
 if [ -z "$WATCOM" ]; then
   echo '$WATCOM not set.'
@@ -12,12 +15,20 @@ if [ -z "$(which wcl)" ]; then
 fi
 
 
+# Build tools if needed
+if [ ! -x "$SCRIPTDIR/tools/prepare" ]; then
+  (
+    cd "$SCRIPTDIR/tools"
+    ./build.sh
+  )
+fi
+
+
 if [[ $# < 2 ]]; then
   echo "usage: $0 <rad-file> <out-file>" >&2
   exit 1
 fi
 
-SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 TMPDIR="$(mktemp -d)"
 
 "$SCRIPTDIR/tools/prepare" "$1" "$TMPDIR/songdata.h"
