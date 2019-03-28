@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 #define RAD_DETECT_REPEATS 1
-#include "../ext/player20.cpp"
+#include "player20.cpp"
 
 #define OPL_BASE_REG                0x388U
 
@@ -125,11 +125,11 @@ int main(int argc, char** argv) {
 
   initialize_pit(player.GetHertz());
 
-  bool hit = false;
-  while(!repeating && !(hit = kbhit())) { }
-
-  if(hit) {
-    getch();
+  while(!repeating) {
+    if(kbhit()) {
+      getch();
+      break;
+    }
   }
 
   cleanup_pit();
