@@ -1,0 +1,107 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+  font-family: sans-serif;
+  background: linear-gradient(to left, #1F4B89, #172E50 20%, #172E50 80%, #1F4B89);
+  color: #B0CDF5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.content-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  background-color: rgba(0,0,0,0.5);
+  padding: 2em;
+  border-radius: 15px;
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.25);
+  width: 700px;
+  line-height: 2;
+}
+
+h1 {
+  color: #E56417;
+  font-size: 30pt;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-row {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+#status {
+  background-color: rgba(0,0,0,0.75);
+  color: #f00 !important;
+  min-height: 32px;
+  line-height: 32px;
+  width: 700px;
+  box-shadow: 0 0 3px rgba(0,0,0,0.75);
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+  display: inline;
+}
+
+.description {
+  line-height: 2;
+  margin-bottom: 2em;
+}
+
+.ignore-help {
+  margin-left: 2em;
+  line-height: 1.5;
+  color: #6A8BBD;
+}

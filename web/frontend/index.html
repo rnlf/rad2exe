@@ -1,22 +1,59 @@
 <!doctype html>
-<html lang="us">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>rad2exe</title>
+
+  <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+
+  <script src="rad2exe_frontend.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="rad2exe.css">
 
 </head>
 <body>
 
-  <form method="post" id="#file-form" enctype="multipart/form-data">
-    <input type="file" name="file" />
-    <input type="submit" value="Upload File" name="submit" />
-  </form>
+  <div class="content-box">
+    <div class="description">
+      <h1>RAD2EXE</h1>
+      <div>Convert a Reality Adlib Tracker 2 file to a 16 bit DOS executable.</div>
+    </div>
+  </div>
+  <div class="content-box">
+    <div class="form">
+      <input class="form-row" type="file" name="file" />
+      <label class="form-row"><input type="checkbox" id="ignore-errors">Ignore validation errors</label>
+      <div class="ignore-help">
+        For some reason, files created with the DOS version of RADTracker can cause error messages in the validation steps (bug in the tracker?). Check this option if that happens to you. This will ignore *all* validation errors though, which can lead to the player crashing.
+      </div>
+      <label class="form-row"><input type="checkbox" id="loop-song">Loop song</label>
+      <div class="ignore-help">
+        Usually, the player will exit once the song ends. This is required at least for Revision Oldskool Compo, but if you prefer a looping version, here's your chance.
+      </div>
+      <label class="form-row"><input type="checkbox" id="compress-exe" checked>Compress executable</label>
+      <div class="ignore-help">
+        Often file size is important. Revision only allows 32K executables. Enabling this option will enable compression of the executable using upx. It does add a small startup latency though.
+      </div>
+      <button class="form-row" id="convert">Make 16Bit DOS executable</button>
+      <div class="form-row" id="status"></div>
+    </div>
+  </div>
+  <div class="content-box">
+    <div class="description">
+    RAD2EXE builds (relatively) small 16 bit executable for DOS from your <a href="https://www.3eality.com/productions/reality-adlib-tracker">Reality Adlib Tracker 2 files</a>.<br>
+    It uses the player and validation classes provided by Reality Productions and builds the executable using <a href="https://github.com/open-watcom">OpenWatcom</a>.
+    The executables are compressed using the fabulous <a href="https://upx.github.io/">upx executable compressor</a>.<br>
+    This is primarily intended to make small executables for retro music competitions that require runnable programs to be submitted (like the Revision Oldskool Music compo).
+    </div>
+  </div>
 
-  <script type="application/javascript">
-    document.getElementById('#file-form').addEventListener('submit', e => {
-      console.log("ding");
-      e.preventDefault();
-    });
-  <script>
+  <div class="content-box">
+    Copyright 2019 Florian Keßeler<br>
+    You are using this tool at your own risk. I cannot give any warranty about the usability or unwanted side effects of using the created executable.
+  </div>
 
 </body>
 </html>
