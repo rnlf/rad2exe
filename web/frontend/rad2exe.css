@@ -51,8 +51,6 @@ table {
 .content-box {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   margin-top: 1em;
   margin-bottom: 1em;
   background-color: rgba(0,0,0,0.5);
@@ -66,6 +64,10 @@ table {
 h1 {
   color: #E56417;
   font-size: 30pt;
+}
+
+h2 {
+  font-size: 20pt;
 }
 
 .form {
@@ -104,4 +106,18 @@ a {
   margin-left: 2em;
   line-height: 1.5;
   color: #6A8BBD;
+}
+
+#title {
+  background-image: url("opl3.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+strong {
+  color: #fff;
+}
+
+li {
+  margin-left: 2em;
 }

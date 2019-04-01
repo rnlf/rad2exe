@@ -16,13 +16,16 @@
 </head>
 <body>
 
-  <div class="content-box">
+  <div class="content-box" id="title">
     <div class="description">
       <h1>RAD2EXE</h1>
       <div>Convert a Reality Adlib Tracker 2 file to a 16 bit DOS executable.</div>
     </div>
   </div>
+
+
   <div class="content-box">
+    <h2>Convert</h2>
     <div class="form">
       <input class="form-row" type="file" name="file" />
       <label class="form-row"><input type="checkbox" id="ignore-errors">Ignore validation errors</label>
@@ -41,7 +44,9 @@
       <div class="form-row" id="status"></div>
     </div>
   </div>
+
   <div class="content-box">
+    <h2>More Info</h2>
     <div class="description">
     RAD2EXE builds (relatively) small 16 bit executable for DOS from your <a href="https://www.3eality.com/productions/reality-adlib-tracker">Reality Adlib Tracker 2 files</a>.<br>
     It uses the player and validation classes provided by Reality Productions and builds the executable using <a href="https://github.com/open-watcom">OpenWatcom</a>.
@@ -49,8 +54,31 @@
     This is primarily intended to make small executables for retro music competitions that require runnable programs to be submitted (like the Revision Oldskool Music compo).
     </div>
   </div>
+  
+  <div class="content-box">
+    <h2>API usage</h2>
+    <p>You can also use this service without the web frontend. Just POST a JSON object to <strong>/convert</strong>. The following fields are supported:</p>
+    <ul>
+      <li>
+        <strong>data</strong>: the base64 encoded contents of your .rad file
+      </li>
+      <li>
+        <strong>ignoreValidationErrors</strong>: if true, the input file is not validated (may produce a non-working .exe!)
+      </li>
+      <li>
+        <strong>loop</strong>: if true, the player will loop the song forever
+      </li>
+      <li>
+        <strong>compress</strong>: if true, the created .exe will be compressed.
+      </li>
+    </ul>
+    <p>
+    If everything goes well, you will get a 200 response containing the URL for the created .exe file in the <strong>result</strong> field of the JSON payload. (Note: this may change soon, such that the created file is included in the response). In case there is something wrong with your input file, you'll get a 400 response and a description of the error in the <strong>error</strong> field of the response's JSON payload.</p>
+    <p>Total POST request size limit is 512K.</p>
+  </div>
 
   <div class="content-box">
+    <h2>Legal blurb</h2>
     Copyright 2019 Florian Keßeler<br>
     You are using this tool at your own risk. I cannot give any warranty about the usability or unwanted side effects of using the created executable.
   </div>
