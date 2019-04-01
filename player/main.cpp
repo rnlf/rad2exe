@@ -2,7 +2,15 @@
 #include <conio.h>
 #include <stdint.h>
 
-#define RAD_DETECT_REPEATS 1
+#ifndef LOOP_SONG
+# define LOOP_SONG 0
+#endif
+
+#if LOOP_SONG == 0
+# define RAD_DETECT_REPEATS 1
+#else
+# define RAD_DETECT_REPEATS 0
+#endif
 #include "player20.cpp"
 
 #define OPL_BASE_REG                0x388U

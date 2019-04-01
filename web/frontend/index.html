@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="us">
+<head>
+  <meta charset="UTF-8" />
+
+</head>
+<body>
+
+  <form method="post" id="#file-form" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <input type="submit" value="Upload File" name="submit" />
+  </form>
+
+  <script type="application/javascript">
+    document.getElementById('#file-form').addEventListener('submit', e => {
+      console.log("ding");
+      e.preventDefault();
+    });
+  <script>
+
+</body>
+</html>

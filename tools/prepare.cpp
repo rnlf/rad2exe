@@ -32,7 +32,7 @@ std::vector<uint8_t> read_rad_file(char const* filename) {
 void validate_rad_file(std::vector<uint8_t> const& data) {
   auto const result = RADValidate(reinterpret_cast<void const*>(data.data()), data.size());
   if(result != nullptr) {
-    std::cerr << result << std::endl;
+    std::cerr << "File validation error: " << result << std::endl;
     exit(1);
   }
 }
@@ -61,12 +61,25 @@ void generate_data_file(char const* filename, std::vector<uint8_t> const& data) 
 
 
 int main(int argc, char** argv) {
+  bool const ignoreErrors = [&] {
+    if(argc > 1) {
+      if(std::string(argv[1]) == "-i") {
+        argc--;
+        argv++;
+        return true;
+      }
+    }
+    return false;
+  }();
+
   if(argc < 3) {
     std::cerr << "usage: " << argv[0] << "<rad-file> <out-file>" << std::endl;
     return 1;
   }
 
   auto data = read_rad_file(argv[1]);
-  validate_rad_file(data);
+  if(!ignoreErrors) {
+    validate_rad_file(data);
+  }
   generate_data_file(argv[2], data);
 }

@@ -1,16 +1,18 @@
 #!/bin/bash -e
 
+echo $@
+
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 
 # Sanity check
 if [ -z "$WATCOM" ]; then
-  echo '$WATCOM not set.'
+  echo '$WATCOM not set.' >&2
   exit 1
 fi
 
 if [ -z "$(which wcl)" ]; then
-  echo "Watcom's wcl not found in \$PATH"
+  echo "Watcom's wcl not found in \$PATH" >&2
   exit 1
 fi
 
@@ -23,6 +25,26 @@ if [ ! -x "$SCRIPTDIR/tools/prepare" ]; then
   )
 fi
 
+IGNORE=""
+LOOP=""
+COMPRESS=""
+while getopts :ilc opt; do 
+  case $opt in
+    i)
+      IGNORE=-i
+      ;;
+    l)
+      LOOP="-dLOOP_SONG=1"
+      ;;
+    c)
+      COMPRESS="y"
+      ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+echo $IGNORE
 
 if [[ $# < 2 ]]; then
   echo "usage: $0 <rad-file> <out-file>" >&2
@@ -31,9 +53,12 @@ fi
 
 TMPDIR="$(mktemp -d)"
 
-"$SCRIPTDIR/tools/prepare" "$1" "$TMPDIR/songdata.h"
+md5sum $1
+"$SCRIPTDIR/tools/prepare" $IGNORE "$1" "$TMPDIR/songdata.h"
 cd "$TMPDIR"
-wcl -bcl=dos -lr -ox -i="$SCRIPTDIR/ext" -i="$TMPDIR" -fe="$TMPDIR/play.exe" -mh "$SCRIPTDIR/player/main.cpp"
+wcl -bcl=dos -lr -ox $LOOP -i="$SCRIPTDIR/ext" -i="$TMPDIR" -fe="$TMPDIR/play.exe" -mh "$SCRIPTDIR/player/main.cpp"
 cd -
-"$SCRIPTDIR/ext/upx" --ultra-brute --8086 "$TMPDIR/play.exe"
+if [ "$COMPRESS" == "y" ]; then
+  "$SCRIPTDIR/ext/upx" --ultra-brute --8086 "$TMPDIR/play.exe"
+fi
 cp "$TMPDIR/play.exe" "$2"

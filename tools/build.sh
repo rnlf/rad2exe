@@ -1,3 +1,3 @@
 #!/bin/bash
 
-g++ -o prepare prepare.cpp
+g++ -std=c++11 -o prepare prepare.cpp
