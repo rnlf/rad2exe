@@ -2,6 +2,8 @@
 
 RAD2EXE is a command line tool and web app that allow you to convert your Reality Adlib Tracker 2 files into small 16 bit DOS executables, like you would need to enter the Revision Oldskool Music Compo.
 
+If you're just looking for a way to make your `.rad` files into DOS executables and don't mind downloading executables from a questionable source (i.e. me), just head over to https://rad2exe.base13.de where this thing here is living.
+
 ## Installation
 
 ### Command Line Tool
