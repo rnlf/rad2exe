@@ -25,7 +25,7 @@ footer, header, hgroup, menu, nav, section {
 body {
   line-height: 1;
   font-family: sans-serif;
-  background: linear-gradient(to left, #1F4B89, #172E50 20%, #172E50 80%, #1F4B89);
+  background: linear-gradient(to left, #1F4B89, #172E50 calc(50% - 400px), #172E50 calc(50% + 400px), #1F4B89);
   color: #B0CDF5;
   display: flex;
   flex-direction: column;
@@ -48,6 +48,7 @@ table {
   border-spacing: 0;
 }
 
+
 .content-box {
   display: flex;
   flex-direction: column;
@@ -62,8 +63,10 @@ table {
 }
 
 h1 {
-  color: #E56417;
-  font-size: 30pt;
+  color: #fff;
+  font-size: 50pt;
+  text-align: center;
+  text-shadow: 0 0 10px #fff;
 }
 
 h2 {
@@ -112,6 +115,7 @@ a {
   background-image: url("opl3.jpg");
   background-size: cover;
   background-position: center;
+  box-shadow: inset 5px 5px 15px rgba(0,0,0,1);
 }
 
 strong {
@@ -120,4 +124,10 @@ strong {
 
 li {
   margin-left: 2em;
+}
+
+#title h2 {
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 0 5px #fff;
 }
