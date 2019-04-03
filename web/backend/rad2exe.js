@@ -1,25 +1,43 @@
-var express = require("express");
-const fs = require("fs");
-var body_parser = require("body-parser");
-const uuidv4 = require('uuid/v4');
+const express       = require("express");
+const fs            = require("fs");
+const body_parser   = require("body-parser");
+const uuidv4        = require('uuid/v4');
 const { spawnSync } = require('child_process');
 
+// Configure server locations
 const exe_file_dir = "/var/www/vhosts/rad2exe.base13.de/files/";
-const rad2exe = "/home/rad2exe/rad2exe/rad2exe";
-const log_dir = "/home/rad2exe/log";
+const rad2exe      = "/home/rad2exe/rad2exe/rad2exe";
 
-var app = express();
+const app = express();
 app.use(body_parser.json({
   limit: "512kb",
 }));
 
 
-app.post("/", async function (req, res, next) {
-  var uuid = uuidv4()
-  var src_file = "/tmp/" + uuid + ".rad";
-  var res_name = uuidv4() + ".exe";
-  var out_name = exe_file_dir + res_name;
+function getCommandLineArgs(body) {
+  var args = [];
 
+  if(body.ignoreValidationErrors) {
+    args.unshift("-i");
+  }
+
+  if(body.loop) {
+    args.unshift("-l");
+  }
+
+  if(body.compress) {
+    args.unshift("-c");
+  }
+
+  return args;
+}
+
+
+app.post("/", async function (req, res, next) {
+  const uuid = uuidv4()
+  const src_file = "/tmp/rad2exe-" + uuid + ".rad";
+  const res_name = uuidv4() + ".exe";
+  const out_name = exe_file_dir + res_name;
 
   if(!req.body.data) {
     res.status(400);
@@ -27,31 +45,29 @@ app.post("/", async function (req, res, next) {
     return;
   }
 
-  var dataBuf = Buffer.from(req.body.data, 'base64');
+  const dataBuf = Buffer.from(req.body.data, 'base64');
   fs.writeFileSync(src_file, dataBuf);
 
-  var args = [src_file, out_name];
-  if(req.body.ignoreValidationErrors) {
-    args.unshift("-i");
-  }
+  var args = getCommandLineArgs(req.body);
+  Array.prototype.push.apply(args, [src_file, out_name]);
 
-  if(req.body.loop) {
-    args.unshift("-l");
-  }
-
-  if(req.body.compress) {
-    args.unshift("-c");
-  }
-
-  var conversion = spawnSync(rad2exe, args);
+  const conversion = spawnSync(rad2exe, args);
+  fs.unlinkSync(src_file);
   if(conversion.status != 0) {
-    var validation_error = conversion.stderr.toString().split(/\r?\n/).filter(l => l.toString().startsWith("File validation error: "));
+    // Does stderr contain a message from the `prepare` tool?
+    const validation_error = conversion.stderr
+      .toString()
+      .split(/\r?\n/)
+      .filter(l => l.toString().startsWith("File validation error: ")
+    );
+
     if(validation_error.length > 0) {
-      var trimmed = validation_error[0].trim()
+      const trimmed = validation_error[0].trim()
       res.status(400);
       res.send({error: trimmed});
       res.end();
     } else {
+      // Something unexpected, just log it for review
       console.log(conversion.stdout.toString())
       console.log(conversion.stderr.toString())
       res.status(500).end();
@@ -65,4 +81,4 @@ app.post("/", async function (req, res, next) {
 });
 
 
-app.listen(4000, "0.0.0.0", () => { });
+app.listen(4000, "0.0.0.0");
