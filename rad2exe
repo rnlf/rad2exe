@@ -1,7 +1,5 @@
 #!/bin/bash -e
 
-echo $@
-
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 
@@ -18,18 +16,18 @@ fi
 
 
 # Build tools if needed
-if [ ! -x "$SCRIPTDIR/tools/prepare" ]; then
-  (
-    cd "$SCRIPTDIR/tools"
-    ./build.sh
-  )
-fi
+(
+  cd "$SCRIPTDIR/tools"
+  ./build.sh
+)
 
+
+# Parse command line
 IGNORE=""
 LOOP=""
 COMPRESS=""
-while getopts :ilc opt; do 
-  case $opt in
+while getopts :ilc OPT; do 
+  case $OPT in
     i)
       IGNORE=-i
       ;;
@@ -44,21 +42,23 @@ done
 
 shift $((OPTIND-1))
 
-echo $IGNORE
-
-if [[ $# < 2 ]]; then
-  echo "usage: $0 <rad-file> <out-file>" >&2
+function usage() {
+  cat >&2 <<EOF
+usage: $(basename "$0") [-i] [-l] [-c] <rad-file> <out-file>
+  -i  ignore .rad file validation errors
+  -l  make player loop song
+  -c  compress created executable
+EOF
   exit 1
-fi
+}
 
+[[ $# < 2 ]] && usage
+
+
+# Do the actual work
 TMPDIR="$(mktemp -d)"
-
-md5sum $1
 "$SCRIPTDIR/tools/prepare" $IGNORE "$1" "$TMPDIR/songdata.h"
-cd "$TMPDIR"
 wcl -bcl=dos -lr -ox $LOOP -i="$SCRIPTDIR/ext" -i="$TMPDIR" -fe="$TMPDIR/play.exe" -mh "$SCRIPTDIR/player/main.cpp"
-cd -
-if [ "$COMPRESS" == "y" ]; then
-  "$SCRIPTDIR/ext/upx" --ultra-brute --8086 "$TMPDIR/play.exe"
-fi
+[ "$COMPRESS" == "y" ] && "$SCRIPTDIR/ext/upx" --ultra-brute --8086 "$TMPDIR/play.exe"
 cp "$TMPDIR/play.exe" "$2"
+rm -rf "$TMPDIR"

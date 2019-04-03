@@ -7,6 +7,7 @@ const { spawnSync } = require('child_process');
 // Configure server locations
 const exe_file_dir = "/var/www/vhosts/rad2exe.base13.de/files/";
 const rad2exe      = "/home/rad2exe/rad2exe/rad2exe";
+const url_prefix   = "/files/";
 
 const app = express();
 app.use(body_parser.json({
@@ -75,7 +76,7 @@ app.post("/", async function (req, res, next) {
     return;
   }
 
-  res.send({result: "/files/" + res_name});
+  res.send({result: url_prefix + res_name});
   res.status(200).end();
 
 });
