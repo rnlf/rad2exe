@@ -3,7 +3,6 @@ $(function() {
 
   function showError(msg) {
     $('#status').empty().text(msg).show();
-    
   }
 
   $('#convert').click(function(event) {
